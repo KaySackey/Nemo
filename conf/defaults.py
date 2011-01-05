@@ -1,6 +1,6 @@
 import os
 from django.conf import settings
-from experiments.nemo.parser import nemo
+from ..parser import nemo
 
 MAKO_TEMPLATE_DIRS=(os.path.join(settings.SITE_ROOT, 'templates'),)
 MAKO_TEMPLATE_OPTS=dict(input_encoding='utf-8',

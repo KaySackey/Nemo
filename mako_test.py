@@ -10,18 +10,11 @@ else:
 
 def nemo(str):
     print "---------  %s --------------" % filename
-    result = NemoParser(debug=True).parse(str)
-    print result
-    return ''
-    # return result
+    # Return a result to Mako which will then render the string
+    return NemoParser(debug=False).parse(str)
 
-    
 t = Template(filename=filename,
             preprocessor=nemo,
             input_encoding='utf-8',
             output_encoding='utf-8',)
 print t.render()
-
-
-
-

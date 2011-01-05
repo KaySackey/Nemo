@@ -103,7 +103,7 @@ class NemoParser(BaseParser):
         # PyParser setParseAction's actually execute during parsing,
         # So we need closures in order to change the current scope
 
-        self.debug = False
+        
         def depth_from_indentation(function):
             """ Set the depth as the start of the match """
             def wrap(start, values):
@@ -142,6 +142,7 @@ class NemoParser(BaseParser):
 
 
         # Match HTML
+        from pyparsing import NotAny, MatchFirst
         html = restOfLine
         html.setParseAction(depth_from_indentation(self._add_html_node))
 
@@ -177,7 +178,7 @@ class NemoParser(BaseParser):
 
         # Match a multi-statement expression. Nemo statements are seperated by |. Anything after || is treated as html
         separator   = Literal('|').suppress()
-        html_separator   = Literal('||')
+        html_separator   = Literal('||') # | Literal('|>')
         nemo_list =  nemo_html + ZeroOrMore( separator + inline_nemo_html )
         inline_html = html.copy()
         inline_html.setParseAction(depth_from_match(self._add_inline_html_node))
@@ -189,12 +190,12 @@ class NemoParser(BaseParser):
 
         # Match unused Mako tags
         mako_tags   = Literal('<%') | Literal('%>') | Literal('%CLOSETEXT') | Literal('</%')
-        mako        = mako_tags + restOfLine
-        mako.setParseAction(depth_from_indentation(self._add_html_node))
+        mako        = mako_tags
+        mako_tags.setParseAction(depth_from_indentation(self._add_html_node))
 
         # Matches General
         nemo        =  (control | nemo_multi | empty)
-        line        =  nemo | html
+        line        =   mako_tags | nemo | html
 
         # Depth Calculation (deprecated?)
         self._depth = len(self._c) - len(self._c.strip())
@@ -223,18 +224,48 @@ class NemoParser(BaseParser):
             active_node.add_child(node)
             return active_node
 
+            # The following check is disabled
+            # --------
 
             # Leafs cannot appear on a higher indentation point than the active node
             # That would be ambiguous
-            raise NemoException('\nIncorrect indentation\n' + \
-                                'at:\n\t%s\n' % active_node + \
-                                'Followed by:\n\t%s\n' % node + \
-                                'Parent:\n\t%s' % active_node.parent )
-
+            #raise NemoException('\nIncorrect indentation\n' + \
+            #                    'at:\n\t%s\n' % active_node + \
+            #                    'Followed by:\n\t%s\n' % node + \
+            #                    'Parent:\n\t%s' % active_node.parent )
         else:
-            result = self._place_in_ancestor(node, active_node)
-            result.check_as_closer(node, active_node)
-            return result
+            """Try to assign node to one of the ancestors of active_node"""
+            testing_node = active_node
+
+            while testing_node is not None:
+                # Close against the first element in the tree that is inline with you
+                if testing_node.depth == node.depth:
+                    # We are trying to close against the root element
+                    if not testing_node.parent:
+                        raise NemoException('\nIncorrect indentation\n' + \
+                                    'at:\n\t%s\n' % node + \
+                                    'attempted to close against:\n\t%s' % testing_node )
+                    else:
+                        parent = testing_node.parent
+                        parent.add_child(node)
+
+                        # Todo: Remove this check
+                        testing_node.check_as_closer(node, active_node)
+                        
+                        return testing_node.parent
+                elif testing_node.depth < node.depth:
+                    raise NemoException('\nIncorrect indentation\n' + \
+                                'at:\n\t%s\n' % node + \
+                                'attempted to close against:\n\t%s' % testing_node )
+            else:
+                # This should never be reached because NemoRoot has a depth of -1
+                raise NemoException('\nIncorrect indentation\n' + \
+                                    'at:\n\t%s\n' % active_node + \
+                                    'Followed by:\n\t%s\n' % node + \
+                                    'Parent:\n\t%s' % parent )
+            #result = self._place_in_ancestor(node, active_node)
+            #result.check_as_closer(node, active_node)
+            #return result
 
     def _add_html_to_tree(self, node, active_node):
         is_blank = not node.value or node.value.isspace()
@@ -250,7 +281,7 @@ class NemoParser(BaseParser):
 
     def _place_in_ancestor(self, node, active_node):
         """Try to assign node to one of the ancestors of active_node"""
-        parent = active_node.parent
+        parent = active_node
         while parent is not None:
             if parent.depth < node.depth:
                 parent.add_child(node)

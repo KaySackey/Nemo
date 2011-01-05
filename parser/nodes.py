@@ -23,7 +23,7 @@ class Node(object):
         """
         raise NemoException('\nIncorrect indentation\n' + \
                             'at:\n\t%s\n' % node + \
-                            'Tried to close against::\n\t%s\n' % self + \
+                            'Tried to close against:\n\t%s\n' % self + \
                             'Within active scope of:\n\t%s' % active_node )
 
     def write(self, buffer):
@@ -115,9 +115,11 @@ class MakoNode(NemoNode):
 
         self._write_children(buffer)
 
+    # Note, very soon this check is going to be removed.
+    # Right now it just provides security against unforseen bugs, causing an explicit failure instead of empty nodes
     def check_as_closer(self, node, active_node):
-        print node
-        print self
+        #print node
+        #print self
         # The node passed in should be a MakoNode or a MakoLeaf at the same indentation level
 
         # Who is closing?
@@ -127,6 +129,7 @@ class MakoNode(NemoNode):
 
         potentially_closed = active_node.parent
         while potentially_closed is not None:
+
             print 'Checking: %s' % potentially_closed
             if potentially_closed.depth == node.depth:
                 # <potentially_closed> is definitely being closed by <node>, and all is well

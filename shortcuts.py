@@ -8,7 +8,7 @@ from djmako.loader import context_to_dict
 from django.template.context import Context
 from django.http import HttpResponse
 
-from experiments.nemo import MakoExceptionWrapper
+from djmako.loader import MakoExceptionWrapper
 
 ## Patched from on MakoTemplate.render()
 def render_nemo_template(mako_template, context, def_name):
