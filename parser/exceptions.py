@@ -1,0 +1,2 @@
+class NemoException(Exception):
+    pass
