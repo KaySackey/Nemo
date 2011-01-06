@@ -17,10 +17,11 @@ Looks like Haml_, eh?
 But this is also Nemo:
 ::
 
-	% ul
+	<ul>
 		<li> Hello world! </li>
 		%li
 			Hello Universe!
+    </ul>
 
 And here's what they BOTH produce:
 ::
@@ -32,7 +33,7 @@ And here's what they BOTH produce:
        </li>
    </ul>
 
-Can Haml do that?
+Can Haml do that? Mixed content documents, and more rope than you know what to do with. That's Nemo.
 
 A longer example, this is Nemo:
 ::
@@ -81,17 +82,15 @@ This project is inspired by PyHaml_. I have looked at PyHaml before, and found t
 	- It is not pythonic in nature
 	- It is overly restrictive
 	- It is not as pretty as it could be
+	- It was not invented here. =)
 
 As such, I set out to create an alternative 12 frantic hours of coding later, I have *something* that may possibly be called alpha.
-
 
 Nemo is intended as an aid, not a shortcut, not a crutch, not a way to avoid learning HTML.
 In order to write proper Nemo, you still have to know HTML and as such it'll get out of your way
 if you just want to write HTML.
 
 However, if you want to write it fast, write in Nemo and let it do the heavy lifting for you.
-
-
 
 Usage
 ===================
@@ -421,6 +420,13 @@ Nemo can easily be extend to support other engines.
 
 Nemo is a preprocessor over Mako, and isn't tied too deeply into it (except for importing FastBufferReader from Mako).
 
+Alternatives?
+----------------------
+Haml:
+    - HamlPy
+    - PyHaml
+
+Others? Contact me.
 
 Links:
 ----------------------
