@@ -5,7 +5,36 @@ Introducing Nemo
 Clarity on the web
 ----------------------------
 
-This is Nemo
+This is Nemo:
+::
+    % ul
+        %li
+            Hello world!
+        %li
+            Hello Universe!
+
+Looks like Haml_, eh?
+But this is also Nemo:
+::
+
+	% ul
+		<li> Hello world! </li>
+		%li
+			Hello Universe!
+
+And here's what they BOTH produce:
+::
+
+   <ul >
+        <li> Hello world! </li>
+       <li >
+            Hello Universe!
+       </li>
+   </ul>
+
+Can Haml do that?
+
+A longer example, this is Nemo:
 ::
 
     % fieldset .'upload'
@@ -13,7 +42,7 @@ This is Nemo
         % div .'controls'
             % form #'upload form' action='#'
                 % ul .'settings'
-					${upload_form.as_ul()}
+					Settings Here
                 % ul
                     % li | a .'start'  href="javascript:upload()" || Start Upload
                     % li | a .'clear_queue' href="javascript:clear()" || Clear Queue
@@ -29,7 +58,7 @@ This is what it produces
 			<div class="controls">
 				<form id="upload_form" action="#">
 					<ul class="settings">
-						${upload_form.as_ul()}
+						Settings Here
 					</ul>
 
 					<ul>
@@ -44,27 +73,6 @@ This is what it produces
 				<div class='uploadifyQueue' id="uploadifyQueue"></div>
 			</div>
 		</fieldset>
-
-Looks like Haml_, eh?
-But this is also Nemo:
-::
-
-	% ul
-		<li> Hello world! </li>
-		%li
-			Hello Universe!
-
-And here's what it produces
-::
-
-   <ul >
-        <li> Hello world! </li>
-       <li >
-            Hello Universe!
-       </li>
-   </ul>
-
-Can Haml do that?
 
 Background
 ==============
