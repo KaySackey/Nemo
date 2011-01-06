@@ -257,6 +257,7 @@ class NemoParser(BaseParser):
                     raise NemoException('\nIncorrect indentation\n' + \
                                 'at:\n\t%s\n' % node + \
                                 'attempted to close against:\n\t%s' % testing_node )
+                testing_node = testing_node.parent
             else:
                 # This should never be reached because NemoRoot has a depth of -1
                 raise NemoException('\nIncorrect indentation\n' + \
