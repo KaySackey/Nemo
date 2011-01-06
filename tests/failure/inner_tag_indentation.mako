@@ -8,8 +8,13 @@
 
     <div>
         % if hello:
-            Testing if wierd indentations are accepted here.
+            Testing if weird indentations are accepted here.
         % else:
-            This should fail
+            This should fail under current rules.
+
+            However, I'm not sure that it *should* fail in general.
+            Because this is perfectly readable indentation.
+
+            Maybe under a rule type: Permissive?
         % endif
     </div>
