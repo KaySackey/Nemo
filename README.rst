@@ -27,7 +27,7 @@ Project
 Usage
 ===================
 
-First, place this module somehwere in your python path.
+First, place this module somewhere in your python path.
 Pip/Easy_install will be supported
 
 Django Integration
@@ -37,39 +37,39 @@ Django Integration
 
 		pip install djmako
 
-- Add 'nemo' to your django sites package. It will automatically use the following defaults:
+- Add 'Nemo' to your Django sites package. It will automatically use the following defaults:
   ::
 
 		MAKO_TEMPLATE_DIRS=(os.path.join(settings.SITE_ROOT, 'templates'),)
 		MAKO_TEMPLATE_OPTS=dict(input_encoding='utf-8',
 					output_encoding='utf-8',
 					module_directory=os.path.join(settings.SITE_ROOT, 'cache'),
-					preprocessor=nemo
+					preprocessor=Nemo
 		)
 
   But you can override this in your settings.py.
-  Only the preprocessor is mandatory to use nemo and it lives in nemo.parser
+  Only the preprocessor is mandatory to use Nemo and it lives in Nemo.parser
 
 - Now in your views
   ::
 
-		from nemo import render_to_response, render_to_string
+		from Nemo import render_to_response, render_to_string
 
-  Then use those as replacements for the django driven ones.
-  Also, if you're used to using mako, you can use these functions to render a single Mako def_ (like for an Ajax view)
+  Then use those as replacements for the Django driven ones.
+  Also, if you're used to using Mako, you can use these functions to render a single Mako def_ (like for an Ajax view)
   ::
 
 		def my_view(request):
-			return render_to_response('templates\list.mako', def_name='item')
+			return render_to_response('templates\list.Mako', def_name='item')
 
 
 Other projects
 ------------------
 ::
 
-	from nemo.parser import nemo
+	from Nemo.parser import Nemo
 	t = Template(filename=filename,
-		preprocessor=nemo,
+		preprocessor=Nemo,
 		input_encoding='utf-8',
 		output_encoding='utf-8',)
 	print t.render()
@@ -79,7 +79,7 @@ Reference
 
 Nemo Tags
 -----------------------------------
-Any line that starts with a % sign will be interpreted as a nemo tag
+Any line that starts with a % sign will be interpreted as a Nemo tag
 
 Playing well with Mako
 -----------------------------------
@@ -108,7 +108,7 @@ They are used without assignment markers. For example, the following two stateme
 
 Caveats:
 	- Nemo will not check for duplicated attributes.
-	- You can only use mako syntax within strings or HTML nodes.
+	- You can only use Mako syntax within strings or HTML nodes.
 	  You can't use it to write your attribute names, like this:
 	  ::
 
@@ -127,7 +127,7 @@ Indentation Rules
 	- if / elif / else / endif
 	- for / endfor
 	- while / endwhile
-- The scope of a nemo block is determined by indentation.
+- The scope of a Nemo block is determined by indentation.
   Thus all of its contents, including bare HTML must be indented to the right of it.
   It doesn't matter precisely how much a bare HTML block is indented, and consistency is unimportant.
 
@@ -210,7 +210,7 @@ Will become:
 
 Closing Tags
 -----------------------------------
-There are three ways a nemo tag will be closed prematurely (e.g. before the end of parsing the document).
+There are three ways a Nemo tag will be closed prematurely (e.g. before the end of parsing the document).
 
 Automatic
 ~~~~~~~~~~~~~~~~~~~~~
@@ -246,7 +246,7 @@ Generates::
 
 Explicit Closure
 ~~~~~~~~~~~~~~~~~~~~~
-To explicitly close a tag, simply place an empty nemo tag (%) on a subsequent line at the same indentation
+To explicitly close a tag, simply place an empty Nemo tag (%) on a subsequent line at the same indentation
 For example:
 ::
 
@@ -299,7 +299,7 @@ Arguments against using Nemo & Responses
 
 "I don't like that Disney fish and/or I'm afraid that they'll sue you for using its name"
 	Haven't you heard of Captain Nemo, aka Prince Dakkar?
-	Besides that 'Disney fish' nemo is a type of Mako shark.
+	Besides that 'Disney fish' Nemo is a type of Mako shark.
 	We have to remember our roots, keep it real, be still Jenny on the block, ecetera and so forth. =)
 
 "I like Haml"
@@ -314,7 +314,7 @@ Future
 
 Syntax
 --------------------------------------
-Currently '||' is the only way to break out of a multi-line nemo statement and get it to nest the subsequent HTML on the rest of the line.
+Currently '||' is the only way to break out of a multi-line Nemo statement and get it to nest the subsequent HTML on the rest of the line.
 However, it is a common case to directly print template variables.
 
 The '| >' terminator will indicate to Nemo that the rest characters should be treated as a python one-liner that returns a string.
@@ -336,7 +336,7 @@ Strict Mode
 Right now Nemo is running in 'Permissive' mode, in that it will always try to make sense of your document.
 That means it may improperly nest things if you mix tabs & spaces.
 
-I have something coded up called "strict mode", that essentiall forces everything to have proper indentation without any laxity.
+I have something coded up called "strict mode", that essential forces everything to have proper indentation without any laxity.
 
 Other Implementations?
 --------------------------------------
