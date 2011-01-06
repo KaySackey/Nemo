@@ -5,23 +5,84 @@ Introducing Nemo
 Clarity on the web
 ----------------------------
 
-Project
-=======
-	This project is inspired by PyHaml_. I have looked at PyHaml before, and found that:
-		- It is not pythonic in nature
-		- It is overly restrictive
-		- It is not as pretty as it could be
+This is Nemo
+::
 
-	As such, I set out to create an alternative 12 frantic hours of coding later, I have *something* that may possibly be called alpha.
+    % fieldset .'upload'
+        % legend | strong || Upload Files
+        % div .'controls'
+            % form #'upload form' action='#'
+                % ul .'settings'
+					${upload_form.as_ul()}
+                % ul
+                    % li | a .'start'  href="javascript:upload()" || Start Upload
+                    % li | a .'clear_queue' href="javascript:clear()" || Clear Queue
+                    % li #'uploadify' || You have a problem with your javascript
+        % div .'queue_wrapper'
+            % div .'uploadifyQueue' #'uploadifyQueue'
+
+This is what it produces
+::
+
+		<fieldset class="upload">
+			<legend><strong>Upload Files</strong></legend>
+			<div class="controls">
+				<form id="upload_form" action="#">
+					<ul class="settings">
+						${upload_form.as_ul()}
+					</ul>
+
+					<ul>
+						<li><a class='start' href="javascript:upload()">Start Upload</a></li>
+						<li><a class='clear_queue' href="javascript:clear()">Clear Queue</a></li>
+						<li id="uploadify">You have a problem with your javascript</li>
+					</ul>
+				</form>
+			</div>
+
+			<div class='queue_wrapper'>
+				<div class='uploadifyQueue' id="uploadifyQueue"></div>
+			</div>
+		</fieldset>
+
+Looks like Haml_, eh?
+But this is also Nemo:
+::
+
+	% ul
+		<li> Hello world! </li>
+		%li
+			Hello Universe!
+
+And here's what it produces
+::
+
+   <ul >
+        <li> Hello world! </li>
+       <li >
+            Hello Universe!
+       </li>
+   </ul>
+
+Can Haml do that?
+
+Background
+==============
+
+This project is inspired by PyHaml_. I have looked at PyHaml before, and found that:
+	- It is not pythonic in nature
+	- It is overly restrictive
+	- It is not as pretty as it could be
+
+As such, I set out to create an alternative 12 frantic hours of coding later, I have *something* that may possibly be called alpha.
 
 
-	Nemo is intended as an aid, not a shortcut, not a crutch, not a way to avoid learning HTML.
-	In order to write proper Nemo, you still have to know HTML and as such it'll get out of your way
-	if you just want to write HTML.
+Nemo is intended as an aid, not a shortcut, not a crutch, not a way to avoid learning HTML.
+In order to write proper Nemo, you still have to know HTML and as such it'll get out of your way
+if you just want to write HTML.
 
-	However, if you want to write it fast, write in Nemo and let it do the heavy lifting for you.
+However, if you want to write it fast, write in Nemo and let it do the heavy lifting for you.
 
-	Nemo uses utf-8 internally by default, and expects you will at least use unicode as the input encoding for your templates.
 
 
 Usage
@@ -76,6 +137,8 @@ Other projects
 
 Reference
 ===================
+
+Nemo uses utf-8 internally by default, and expects you will at least use unicode as the input encoding for your templates.
 
 Nemo Tags
 -----------------------------------
