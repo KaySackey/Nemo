@@ -461,8 +461,14 @@ Nemo is a preprocessor over Mako, and isn't tied too deeply into it (except for 
 Alternatives?
 ----------------------
 Haml:
-    - HamlPy
-    - PyHaml
+    - HamlPy_
+    - PyHaml_
+    - DjangoHaml_
+    - Dmsl_
+    - SHPaml_
+    - Pamela_
+    - Mint_
+    - MakoHaml_
 
 Others? Contact me.
 
@@ -471,8 +477,11 @@ Links:
 - Mako_
 - Haml_
 - DjangoHaml_
-- Dmsl
-- SHPaml
+- Dmsl_
+- SHPaml_
+- Pamela_
+- Mint_
+- MakoHaml_
 - GRHaml (Dead)
 
 .. _def: http://www.makotemplates.org/docs/defs.html
@@ -482,3 +491,6 @@ Links:
 .. _DjangoHaml: https://github.com/fitoria/django-haml
 .. _Dmsl:: https://github.com/dasacc22/dmsl
 .. _SHPaml: http://shpaml.webfactional.com/
+.. _Pamela: https://github.com/sebastien/pamela
+.. _Mint: https://github.com/riffm/mint
+.. _MakoHaml: https://github.com/raineri/MakoHaml
