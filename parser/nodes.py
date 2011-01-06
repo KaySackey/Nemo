@@ -103,7 +103,7 @@ class NemoNode(Node):
             # If this is disabled then depth.failure and inner_tag_indentation.failure will both succeed
             # It is dubious if we want this
             # Todo: Permissive mode
-            if child.follows_indentation_rules and False:
+            if child.follows_indentation_rules:
                 if depth_seen is None:
                     depth_seen = child.depth
                 elif child.depth is not depth_seen:

@@ -193,13 +193,14 @@ To compare, this limitation is present in Haml (afaik) as well.
 
 Indentation Rules
 -----------------------------------
-- All grouped control tags must appear on the same line. These are:
+All grouped control tags must have the same indentation. These are:
 	- if / elif / else / endif
 	- for / endfor
 	- while / endwhile
-- The scope of a Nemo block is determined by indentation.
-  Thus all of its contents, including bare HTML must be indented to the right of it.
-  It doesn't matter precisely how much a bare HTML block is indented, and consistency is unimportant.
+
+The scope of a Nemo block is determined by indentation.
+Thus all of its contents, including bare HTML must be indented to the right of it.
+It doesn't matter precisely how much a bare HTML block is indented, and consistency is unimportant.
 
 HTML Escaping
 -----------------------------------
@@ -280,11 +281,11 @@ Will become:
 
 Closing Tags
 -----------------------------------
-There are three ways a Nemo tag will be closed prematurely (e.g. before the end of parsing the document).
+There are three ways a Nemo tag will be closed prematurely (e.g. before the end of parsing the document): automatic, implied, and explicit.
 
 Automatic
 ~~~~~~~~~~~~~~~~~~~~~
-Also, all tags without content are automatically closed.
+All tags without content are automatically closed.
 
 Example::
 
@@ -296,7 +297,7 @@ Generates::
 
 Implied Closure
 ~~~~~~~~~~~~~~~~~~~~~
-An HTML block or something that's treated as such (e.g. a Mako tag) appears at a lesser indentation.
+This is triggered by a HTML block or something that's treated as such (e.g. a Mako tag) appears at a lesser indentation.
 
 Example::
 
@@ -335,30 +336,28 @@ Generates:
 
 Debugging
 ======================================================
- - A lot of work has been put into Nemo to make it fail fast upon ambiguity, and yet generate good error messages.
-   Anyone who's used an OCaml parser can agree when I say this is fundamental to a good parser[#]
+- A lot of work has been put into Nemo to make it fail fast upon ambiguity, and yet generate good error messages.
+  Anyone who's used an OCaml parser can agree when I say this is fundamental to a good parser[#]
 
 
- - Errors are tracked back to the source line that caused them
-   If possible, Nemo will also tell you what it expected at that point.
+- Errors are tracked back to the source line that caused them
+  If possible, Nemo will also tell you what it expected at that point.
 
-   For more basic errors, you might see this an an exception traceback.
-   ::
+For more basic errors, you might see this an an exception traceback.
+::
 
-			   [8|Line: 6][        % endfor]
-				^		^			^
-				|		|			|
-				Depth	Line #		Source content
+           [8|Line: 6][        % endfor]
+            ^		^			^
+            |		|			|
+            Depth	Line #		Source content
 
-	This kind of traceback is usually produced by ambiguous indentation.
-
-
+This kind of traceback is usually produced by ambiguous indentation.
 
 Arguments against using Nemo & Responses
 ======================================================
 "I know HTML"
 	Good, this makes it easier to write it and gets out of your way if you don't want to use it.
-	This means you don't have to convert the entirety of your document to Nemo first, just the parts you want to.
+	This means you don't have to convert the entirety of your document to Nemo first---just the parts you want to.
 
 "I hate indentation"
 	This would be a valid argument if Nemo was for Rubyists, or C-philes, or PHPers,
@@ -401,12 +400,51 @@ Finally, this will be possible:
 			% div #'bio' 		|> current_user.bio
 
 
-Strict Mode
+Strict Mode and Permissive Mode
 ---------------------------------------
-Right now Nemo is running in 'Permissive' mode, in that it will always try to make sense of your document.
+
+
+Right now Nemo is running in 'Mixed' mode, in that it will always try to make sense of your document.
+However if you start a nemo block, it'll expct all of the contents to follow Nemo rules.
 That means it may improperly nest things if you mix tabs & spaces.
 
+
 I have something coded up called "strict mode", that essential forces everything to have proper indentation without any laxity.
+
+Permissive mode on the other hand disables all checks and let's you live in the dangerous land of ambiguity.
+In Permissive mode, the only indentation rule followed is that contents must be to the right of their open scope.
+Nemo will no longer check to see if all the child nodes are properly indented.
+
+The differences are best demonstrated with an example:
+::
+
+    <body>
+        <div>
+            % span
+                Hello World!
+        </div>
+
+        % div
+            Under permissive rules I'm allowed.
+
+            Under Mixed rules I'll parse until this point.
+                Why?
+                Well I'm nested under the document root.
+
+            Under strict rules I'll fail because that %span tag is above me.
+
+
+        % ul
+            % li
+                % span
+            <li>
+                % span
+                    Under permissive rules I'm allowed.
+                    Under mixed or strict rules I fail.
+                        Why?
+                        Because I'm enclosed by a Nemo node, the %ul.
+            </li>
+    </body>
 
 Other Implementations?
 --------------------------------------
