@@ -470,8 +470,15 @@ Links:
 ----------------------
 - Mako_
 - Haml_
+- DjangoHaml_
+- Dmsl
+- SHPaml
+- GRHaml (Dead)
 
 .. _def: http://www.makotemplates.org/docs/defs.html
 .. _Mako: http://www.makotemplates.org/
 .. _Haml: http://haml-lang.com/
 .. _PyHaml: https://github.com/mikeboers/PyHAML
+.. _DjangoHaml: https://github.com/fitoria/django-haml
+.. _Dmsl:: https://github.com/dasacc22/dmsl
+.. _SHPaml: http://shpaml.webfactional.com/
