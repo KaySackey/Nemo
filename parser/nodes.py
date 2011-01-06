@@ -72,17 +72,38 @@ class NemoNode(Node):
             buffer.writelines( self._padding() )
             buffer.writelines( ['</', self._keyword, '>'] )
 
+            
+            
     def _write_children(self, buffer):
         """
            Write child nodes onto the buffer.
            Ensure that all non-leaf (end tags, raw strings), occur on the same depth
         """
         depth_seen = None
+        open_mako_context = None
         for child in self.children:
+            # Write the child
+            child.write(buffer)
+
+            child_type = type(child)
+            
+            # Check child nodes for open/close semantics
+            if child_type is MakoNode and open_mako_context is None:
+                open_mako_context = child
+            if child_type is MakoEndTag:
+                if open_mako_context is None:
+                    # Closer w/o an open context
+                    raise NemoException('\nEnd tag without open context\n' + \
+                                        'at:\n\t%s\n' % child + \
+                                        'within:\n\t%s\n' % self )
+                # Close context
+                open_mako_context = None
+
             # Ensure child is at correct depth
-            # If this is disabled then depth.failure and inner_tag_indentation.failure will both suceed
+            # If this is disabled then depth.failure and inner_tag_indentation.failure will both succeed
             # It is dubious if we want this
-            if child.follows_indentation_rules:
+            # Todo: Permissive mode
+            if child.follows_indentation_rules and False:
                 if depth_seen is None:
                     depth_seen = child.depth
                 elif child.depth is not depth_seen:
@@ -91,8 +112,12 @@ class NemoNode(Node):
                                          'within:\n\t%s\n' % self + \
                                          'expected indentation of %d ' % depth_seen
                                         )
-            # Write the child
-            child.write(buffer)
+
+        if open_mako_context is not None:
+            # Open context without a closer
+            raise NemoException('\nOpen tag without a closer found:\n' + \
+                                'at:\n\t%s\n' % open_mako_context + \
+                                'within:\n\t%s\n' % self )
 
 class MakoNode(NemoNode):
     """
@@ -112,6 +137,7 @@ class MakoNode(NemoNode):
     def write(self, buffer):
         buffer.write("\n")
         buffer.write(self.value)
+
 
         self._write_children(buffer)
 
@@ -165,8 +191,31 @@ class NemoRoot(NemoNode):
            Tags within the root can occur on any depth you feel like.
            Todo: Check if this messes things up if your tags under the root are ambiguously aligned
         """
+
+        open_mako_context = None
         for child in self.children:
+            # Recurse into child nodes first
             child.write(buffer)
+
+            child_type = type(child)
+
+            # Check child nodes for open/close semantics
+            if child_type is MakoNode and open_mako_context is None:
+                open_mako_context = child
+            if child_type is MakoEndTag:
+                if open_mako_context is None:
+                    # Closer w/o an open context
+                    raise NemoException('\nEnd tag without open context\n' + \
+                                        'at:\n\t%s\n' % child + \
+                                        'within:\n\t%s\n' % self )
+                # Close context
+                open_mako_context = None
+
+        if open_mako_context is not None:
+            # Open context without a closer
+            raise NemoException('\nOpen tag without a closer found:\n' + \
+                                'at:\n\t%s\n' % open_mako_context + \
+                                'within:\n\t%s\n' % self )
 
 class Leaf(Node):
     """
