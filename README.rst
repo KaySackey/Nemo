@@ -96,7 +96,13 @@ Usage
 ===================
 
 First, place this module somewhere in your python path.
-Pip/Easy_install will be supported
+Pip/Easy_install will be supported later.
+
+Nemo is built over Mako but has to be installed separately.
+::
+
+    pip install mako
+
 
 Django Integration
 ----------------------
