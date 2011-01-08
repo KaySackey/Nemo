@@ -374,8 +374,11 @@ Arguments against using Nemo & Responses
 
 "I don't like that Disney fish and/or I'm afraid that they'll sue you for using its name"
 	Haven't you heard of Captain Nemo, aka Prince Dakkar?
-	Besides that 'Disney fish' Nemo is a type of Mako shark.
-	We have to remember our roots, keep it real, be still Jenny on the block, ecetera and so forth. =)
+	Also, when I was searching for a name I thought that 'the Disney fish' Nemo was a type of Mako shark.
+	Apparently Chum is the Mako shark in the movie.
+
+	However, rest assured in a parallel universe Nemo is the Mako shark and I can say
+	that we are remembering our roots, keeping it real, and are still Jenny on the block, ecetera and so forth. =)
 
 "I like Haml"
 	This is a can of worms I'll talk about later.
