@@ -173,7 +173,7 @@ class NemoParser(BaseParser):
         inline_nemo_html.setParseAction(depth_from_match(self._add_nemo_node))
 
         # Match first nemo tag on the line (the one that may begin a multi-statement expression)        
-        nemo_html = nemo_tag + Group(Word(alphas) + Group(ZeroOrMore(argument)))
+        nemo_html = nemo_tag + Group(Word(alphanums+"_-:") + Group(ZeroOrMore(argument)))
         nemo_html.setParseAction(depth_from_nemo_tag(self._add_nemo_node))
 
         # Match a multi-statement expression. Nemo statements are seperated by |. Anything after || is treated as html
