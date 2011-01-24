@@ -8,7 +8,7 @@ else:
     print 'A filename is required'
     exit()
 
-def nemo(str, debug=True):
+def nemo(str, debug=False):
     if debug: print "[Debug]---------  %s --------------[Debug]\n" % filename
 
     result = NemoParser(debug=debug).parse(str)
