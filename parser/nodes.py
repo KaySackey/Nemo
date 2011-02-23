@@ -169,7 +169,7 @@ class MakoNode(NemoNode):
         potentially_closed = active_node.parent
         while potentially_closed is not None:
 
-            print 'Checking: %s' % potentially_closed
+            #print 'Checking: %s' % potentially_closed
             if potentially_closed.depth == node.depth:
                 # <potentially_closed> is definitely being closed by <node>, and all is well
                 # Todo: Perform type checking to make sure MakoNodes only close against other MakoNodes
