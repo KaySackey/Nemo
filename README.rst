@@ -141,9 +141,10 @@ Other projects
 ------------------
 ::
 
-	from Nemo.parser import Nemo
+	from Nemo.parser import nemo
+	from mako.template import Template
 	t = Template(filename=filename,
-		preprocessor=Nemo,
+		preprocessor=nemo,
 		input_encoding='utf-8',
 		output_encoding='utf-8',)
 	print t.render()
