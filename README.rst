@@ -111,14 +111,14 @@ Django Integration
 
 		pip install djmako
 
-- Add 'Nemo' to your Django sites package. It will automatically use the following defaults:
+- Add 'nemo.app' to your Django sites package. It will automatically use the following defaults:
   ::
 
 		MAKO_TEMPLATE_DIRS=(os.path.join(settings.SITE_ROOT, 'templates'),)
 		MAKO_TEMPLATE_OPTS=dict(input_encoding='utf-8',
 					output_encoding='utf-8',
 					module_directory=os.path.join(settings.SITE_ROOT, 'cache'),
-					preprocessor=Nemo
+					preprocessor=nemo
 		)
 
   But you can override this in your settings.py.
@@ -127,7 +127,7 @@ Django Integration
 - Now in your views
   ::
 
-		from Nemo import render_to_response, render_to_string
+		from nemo import render_to_response, render_to_string
 
   Then use those as replacements for the Django driven ones.
   Also, if you're used to using Mako, you can use these functions to render a single Mako def_ (like for an Ajax view)
@@ -141,7 +141,7 @@ Other projects
 ------------------
 ::
 
-	from Nemo.parser import nemo
+	from nemo.parser import nemo
 	from mako.template import Template
 	t = Template(filename=filename,
 		preprocessor=nemo,
@@ -153,7 +153,8 @@ Other projects
 Changelog
 ==================
 0.9b
-If you've been following Nemo, this release comes with a bunch of backwards incompatible changes.
+
+If you've been following Nemo, version 1.0 will likely come with a few backwards incompatible changes. This is the preview.
 The intent is to allow Nemo to be cleanly used without Django. In the previous release, you could use Nemo, but you'd have to catch import errors.
 The changes are:
 
@@ -163,7 +164,11 @@ The changes are:
 - loader, MakoExceptionWrapper, and conf are no longer exposed through the top-level module (nemo)
   However, render_to_response and render_to_string are still exposed if needed for now, but don't rely on this behavior. Start using nemo.app.shortcuts to import them.
 
+Right now, *no code* needs to be changed on your part, but to future-proof your design please use 'nemo.app' in your Django app settings, instead of 'nemo' as was previously required.
+Also, import render_to_* from nemo.app.shortcuts or nemo.app
+
 0.8
+
 - Released January 6th, 2011
 
 Reference
