@@ -149,6 +149,23 @@ Other projects
 		output_encoding='utf-8',)
 	print t.render()
 
+
+Changelog
+==================
+0.9b
+If you've been following Nemo, this release comes with a bunch of backwards incompatible changes.
+The intent is to allow Nemo to be cleanly used without Django. In the previous release, you could use Nemo, but you'd have to catch import errors.
+The changes are:
+
+- nemo.app now contains all django related materials
+  It exposes: render_to_response, render_to_string, loader (Djmako's loader), MakoExceptionWrapper (exceptions from Djmako that django can template), and defaults (configuration)
+- nemo.shortcuts has been moved into nemo.app.shortcuts
+- loader, MakoExceptionWrapper, and conf are no longer exposed through the top-level module (nemo)
+  However, render_to_response and render_to_string are still exposed if needed for now, but don't rely on this behavior. Start using nemo.app.shortcuts to import them.
+
+0.8
+- Released January 6th, 2011
+
 Reference
 ===================
 
