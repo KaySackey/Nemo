@@ -7,8 +7,12 @@ from django.template.loader import get_template, select_template
 from djmako.loader import context_to_dict
 from django.template.context import Context
 from django.http import HttpResponse
-
+from django.utils import simplejson
 from djmako.loader import MakoExceptionWrapper
+
+from django.shortcuts import redirect
+
+__all__ = ('redirect', 'render_to_string', 'render_to_response', 'json_response')
 
 ## Patched from on MakoTemplate.render()
 def render_nemo_template(mako_template, context, def_name):
@@ -53,4 +57,9 @@ def render_to_response(*args, **kwargs):
     """
     httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None)}
     return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
+
+def json_response(obj, **kwargs):
+    return HttpResponse(simplejson.dumps(obj), **kwargs)
+
+
 
