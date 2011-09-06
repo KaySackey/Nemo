@@ -14,3 +14,8 @@ for setting in dir(defaults):
         setattr(settings, setting, getattr(defaults, setting))
 
 settings.TEMPLATE_LOADERS = ( 'djmako.MakoLoader', ) + settings.TEMPLATE_LOADERS
+
+if 'preprocessor' not in settings.MAKO_TEMPLATE_OPTS:
+    from ..parser import nemo
+    settings.MAKO_TEMPLATE_OPTS['preprocessor'] = nemo
+                        
