@@ -62,7 +62,11 @@ def render_to_response(*args, **kwargs):
     return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
 
 def json_response(obj, **kwargs):
-    return HttpResponse(simplejson.dumps(obj), **kwargs)
+    httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None),
+                           'status': kwargs.pop('status', None),
+                           'content_type': kwargs.pop('content_type', 'application/json')
+                           }
+    return HttpResponse(simplejson.dumps(obj), **httpresponse_kwargs)
 
 
 
