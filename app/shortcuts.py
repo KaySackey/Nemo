@@ -55,7 +55,10 @@ def render_to_response(*args, **kwargs):
     Returns a HttpResponse whose content is filled with the result of calling
     django.template.loader.render_to_string() with the passed arguments.
     """
-    httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None)}
+    httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None),
+                           'status': kwargs.pop('status', None),
+                           'content_type': kwargs.pop('content_type', None)
+                           }
     return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
 
 def json_response(obj, **kwargs):
