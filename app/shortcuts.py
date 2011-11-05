@@ -5,14 +5,14 @@
 from mako.exceptions import MakoException
 from django.template.loader import get_template, select_template
 from djmako.loader import context_to_dict
-from django.template.context import Context
+from django.template.context import Context, RequestContext
 from django.http import HttpResponse
 from django.utils import simplejson
 from djmako.loader import MakoExceptionWrapper
 
 from django.shortcuts import redirect
 
-__all__ = ('redirect', 'render_to_string', 'render_to_response', 'json_response')
+__all__ = ('redirect', 'render_to_string', 'render_to_response', 'json_response', 'render')
 
 ## Patched from on MakoTemplate.render()
 def render_nemo_template(mako_template, context, def_name):
@@ -62,11 +62,31 @@ def render_to_response(*args, **kwargs):
     return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
 
 def json_response(obj, **kwargs):
+    return HttpResponse(simplejson.dumps(obj), **kwargs)
+
+def render(request, *args, **kwargs):
+    """
+    Returns a HttpResponse whose content is filled with the result of calling
+    django.template.loader.render_to_string() with the passed arguments.
+    Uses a RequestContext by default.
+    """
     httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None),
                            'status': kwargs.pop('status', None),
-                           'content_type': kwargs.pop('content_type', 'application/json')
+                           'content_type': kwargs.pop('content_type', None)
                            }
-    return HttpResponse(simplejson.dumps(obj), **httpresponse_kwargs)
+
+    if 'context_instance' in kwargs:
+        context_instance = kwargs.pop('context_instance')
+        if kwargs.get('current_app', None):
+            raise ValueError('If you provide a context_instance you must '
+                             'set its current_app before calling render()')
+    else:
+        current_app = kwargs.pop('current_app', None)
+        context_instance = RequestContext(request, current_app=current_app)
+
+    kwargs['context_instance'] = context_instance
+
+    return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
 
 
 

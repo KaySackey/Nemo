@@ -7,7 +7,7 @@ from djmako.loader import MakoExceptionWrapper
 from shortcuts import *
 
 __all__ = ('render_to_response', 'render_to_string', 'json_response', 'redirect',
-           'loader', 'MakoExceptionWrapper', 'defaults')
+           'loader', 'MakoExceptionWrapper', 'defaults', 'render')
 
 for setting in dir(defaults):
     if setting == setting.upper() and not hasattr(settings, setting):
