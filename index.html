@@ -1,0 +1,566 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Nemo by 9cloud</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/9cloud/Nemo">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/9cloud/Nemo/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/9cloud/Nemo/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Nemo</h1>
+          <p>A HTML template language built over Mako for rapid development, and clearer code</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/9cloud">9cloud</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1></h1>
+
+<h1>Introducing Nemo</h1>
+
+<hr><h2>Clarity on the web</h2>
+
+<p>This is Nemo:
+::
+    % ul
+        %li
+            Hello world!
+        %li
+            Hello Universe!</p>
+
+<p>Looks like Haml_, eh?
+But this is also Nemo:
+::</p>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt; Hello world! &lt;/li&gt;
+    %li
+        Hello Universe!
+&lt;/ul&gt;
+</code></pre>
+
+<p>And here's what they BOTH produce:
+::</p>
+
+<p></p><ul>
+<li> Hello world! </li>
+       <li>
+            Hello Universe!
+       </li>
+   </ul><p>Can Haml do that? Mixed content documents, and more rope than you know what to do with. That's Nemo.</p>
+
+<p>A longer example, this is Nemo:
+::</p>
+
+<pre><code>% fieldset .'upload'
+    % legend | strong || Upload Files
+    % div .'controls'
+        % form #'upload form' action='#'
+            % ul .'settings'
+                Settings Here
+            % ul
+                % li | a .'start'  href="javascript:upload()" || Start Upload
+                % li | a .'clear_queue' href="javascript:clear()" || Clear Queue
+                % li #'uploadify' || You have a problem with your javascript
+    % div .'queue_wrapper'
+        % div .'uploadifyQueue' #'uploadifyQueue'
+</code></pre>
+
+<p>This is what it produces
+::</p>
+
+<pre><code>    &lt;fieldset class="upload"&gt;
+        &lt;legend&gt;&lt;strong&gt;Upload Files&lt;/strong&gt;&lt;/legend&gt;
+        &lt;div class="controls"&gt;
+            &lt;form id="upload_form" action="#"&gt;
+                &lt;ul class="settings"&gt;
+                    Settings Here
+                &lt;/ul&gt;
+
+                &lt;ul&gt;
+                    &lt;li&gt;&lt;a class='start' href="javascript:upload()"&gt;Start Upload&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a class='clear_queue' href="javascript:clear()"&gt;Clear Queue&lt;/a&gt;&lt;/li&gt;
+                    &lt;li id="uploadify"&gt;You have a problem with your javascript&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+
+        &lt;div class='queue_wrapper'&gt;
+            &lt;div class='uploadifyQueue' id="uploadifyQueue"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+</code></pre>
+
+<h1>Background</h1>
+
+<p>This project is inspired by PyHaml. I have looked at PyHaml before, and found that:
+    - It is not pythonic in nature
+    - It is overly restrictive
+    - It is not as pretty as it could be
+    - It was not invented here. =)</p>
+
+<p>As such, I set out to create an alternative 12 frantic hours of coding later, I have <em>something</em> that may possibly be called alpha.</p>
+
+<p>Nemo is intended as an aid, not a shortcut, not a crutch, not a way to avoid learning HTML.
+In order to write proper Nemo, you still have to know HTML and as such it'll get out of your way
+if you just want to write HTML.</p>
+
+<p>However, if you want to write it fast, write in Nemo and let it do the heavy lifting for you.</p>
+
+<h1>Usage</h1>
+
+<p>First, place this module somewhere in your python path.
+Pip/Easy_install will be supported later.</p>
+
+<p>Nemo is built over Mako but has to be installed separately.
+::</p>
+
+<pre><code>pip install mako
+</code></pre>
+
+<h2>Django Integration</h2>
+
+<ul>
+<li>
+<p>Install Djmako to get a Django template loaders for Mako.
+::</p>
+
+<pre><code>pip install djmako
+</code></pre>
+</li>
+<li>
+<p>Add 'nemo.app' to your Django sites package. It will automatically use the following defaults:
+::</p>
+
+<pre><code>MAKO_TEMPLATE_DIRS=(os.path.join(settings.SITE_ROOT, 'templates'),)
+MAKO_TEMPLATE_OPTS=dict(input_encoding='utf-8',
+            output_encoding='utf-8',
+            module_directory=os.path.join(settings.SITE_ROOT, 'cache'),
+            preprocessor=nemo
+)
+</code></pre>
+</li>
+</ul><p>But you can override this in your settings.py.
+  Only the preprocessor is mandatory to use Nemo and it lives in Nemo.parser</p>
+
+<ul>
+<li>
+<p>Now in your views
+::</p>
+
+<pre><code>from nemo import render_to_response, render_to_string
+</code></pre>
+</li>
+</ul><p>Then use those as replacements for the Django driven ones.
+  Also, if you're used to using Mako, you can use these functions to render a single Mako def_ (like for an Ajax view)
+  ::</p>
+
+<pre><code>    def my_view(request):
+        return render_to_response('templates\list.Mako', def_name='item')
+</code></pre>
+
+<h2>Other projects</h2>
+
+<p>::</p>
+
+<pre><code>from nemo.parser import nemo
+from mako.template import Template
+t = Template(filename=filename,
+    preprocessor=nemo,
+    input_encoding='utf-8',
+    output_encoding='utf-8',)
+print t.render()
+</code></pre>
+
+<h1>Changelog</h1>
+
+<p>0.9b</p>
+
+<p>If you've been following Nemo, version 1.0 will likely come with a few backwards incompatible changes. This is the preview.
+The intent is to allow Nemo to be cleanly used without Django. In the previous release, you could use Nemo, but you'd have to catch import errors.
+The changes are:</p>
+
+<ul>
+<li>nemo.app now contains all django related materials
+It exposes: render_to_response, render_to_string, loader (Djmako's loader), MakoExceptionWrapper (exceptions from Djmako that django can template), and defaults (configuration)</li>
+<li>nemo.shortcuts has been moved into nemo.app.shortcuts</li>
+<li>loader, MakoExceptionWrapper, and conf are no longer exposed through the top-level module (nemo)
+However, render_to_response and render_to_string are still exposed if needed for now, but don't rely on this behavior. Start using nemo.app.shortcuts to import them.</li>
+</ul><p>Right now, <em>no code</em> needs to be changed on your part, but to future-proof your design please use 'nemo.app' in your Django app settings, instead of 'nemo' as was previously required.
+Also, import render<em>to</em>* from nemo.app.shortcuts or nemo.app</p>
+
+<p>0.8</p>
+
+<ul>
+<li>Released January 6th, 2011</li>
+</ul><h1>Reference</h1>
+
+<p>Nemo uses utf-8 internally by default, and expects you will at least use unicode as the input encoding for your templates.</p>
+
+<h2>Nemo Tags</h2>
+
+<p>Any line that starts with a % sign will be interpreted as a Nemo tag</p>
+
+<h2>Playing well with Mako</h2>
+
+<p>Nemo allows for all Mako code and control structures.
+However, Mako control structures have to follow the same indentation rules as Nemo code.</p>
+
+<h2>Attributes</h2>
+
+<p>To output HTML, Nemo is written like this:
+::</p>
+
+<pre><code>% &lt;element type&gt; &lt;attributes 0 ... 1&gt;
+</code></pre>
+
+<p>Where attributes are written as  = </p>
+
+<p>In the case of the attributes class and id, Nemo provides two short forms:
+- #  denotes an id
+- .  denotes a class</p>
+
+<p>They are used without assignment markers. For example, the following two statements are equivilent
+::</p>
+
+<pre><code>% div .'example' #'first'
+% div class='example' id='first'
+</code></pre>
+
+<p>Caveats:
+    - Nemo will not check for duplicated attributes.
+    - You can only use Mako syntax within strings or HTML nodes.
+      You can't use it to write your attribute names, like this:
+      ::</p>
+
+<pre><code>        % li ${name}=${value}
+
+  It will be converted to an empty node
+  ::
+
+        &lt;li /&gt;
+</code></pre>
+
+<p>To compare, this limitation is present in Haml (afaik) as well.</p>
+
+<h2>Indentation Rules</h2>
+
+<p>All grouped control tags must have the same indentation. These are:
+    - if / elif / else / endif
+    - for / endfor
+    - while / endwhile</p>
+
+<p>The scope of a Nemo block is determined by indentation.
+Thus all of its contents, including bare HTML must be indented to the right of it.
+It doesn't matter precisely how much a bare HTML block is indented, and consistency is unimportant.</p>
+
+<h2>HTML Escaping</h2>
+
+<p>Nemo intends to make it easy for you to drop down to HTML at any point.
+In the general case, there is no explicit escaping and any line that doesn't start with % is treated as HTML.</p>
+
+<p>The exception is Mako end-tags:
+    - %&gt;
+    - %CLOSETEXT</p>
+
+<p>These are treated as HTML and go unprocessed even though they begin with a % sign.</p>
+
+<p>For example:
+    - You can write this as a valid Nemo block::</p>
+
+<pre><code>    % ul
+        &lt;li ${get_my_attributes()} &gt; Custom &lt;/li&gt;
+
+- Or write inline javascript. Or write inline CSS.
+- Or drop in other code that will be processed *later*  by another agent (e.g. Mako code).
+</code></pre>
+
+<p>One fun consequence is that multi-line blocks are allowed <em>without</em> any extra escaping.</p>
+
+<p>Remember doing this in Haml?
+::</p>
+
+<pre><code>%whoo
+  %hoo= h(                       |
+    "I think this might get " +  |
+    "pretty long so I should " + |
+    "probably make it " +        |
+    "multiline so it doesn't " + |
+    "look awful.")               |
+  %p This is short.
+</code></pre>
+
+<p>Well here's how you do it in Nemo:
+::</p>
+
+<pre><code>%whoo
+  % hoo
+        I think this might get
+        pretty long so I should
+        probably make it
+        multiline so it doesn't
+        look awful.
+  % p This is short
+</code></pre>
+
+<h2>Chaining Nemo Expressions</h2>
+
+<p>Nemo tags can be chained using '|' as a separator.
+To output HTML at the end, place either '||' before the HTML.
+Anything after those markers will be output on a line of its own, at the beginning of the line and subject to further processing by Mako.</p>
+
+<p>Nemo::</p>
+
+<pre><code>    %li .'toggle top'
+        % a .'open' href='#' |&gt; Login | Register
+        % a .'close' href='#' style='display: none;' || Close Panel
+</code></pre>
+
+<p>HTML::</p>
+
+<pre><code>    &lt;li class="toggle top"&gt;
+        &lt;a class="open" href="#"&gt;Log In | Register&lt;/a&gt;
+        &lt;a class="close" href="#"  style="display: none;"&gt;Close Panel&lt;/a&gt;
+    &lt;/li&gt;
+</code></pre>
+
+<p>As a result, you can use Mako for expression substitution in the same line as Nemo tags.
+For example:
+::</p>
+
+<pre><code>% span || 1 + 2 = ${1 + 2}
+</code></pre>
+
+<p>Will become:
+::</p>
+
+<pre><code>&lt;span&gt;'12'&lt;/span&gt;
+</code></pre>
+
+<h2>Closing Tags</h2>
+
+<p>There are three ways a Nemo tag will be closed prematurely (e.g. before the end of parsing the document): automatic, implied, and explicit.</p>
+
+<p>Automatic
+~~~~~~~~~~~~~~~~~~~~~
+All tags without content are automatically closed.</p>
+
+<p>Example::</p>
+
+<pre><code>        % li
+</code></pre>
+
+<p>Generates::</p>
+
+<pre><code>        % &lt;li /&gt;
+</code></pre>
+
+<p>Implied Closure
+~~~~~~~~~~~~~~~~~~~~~
+This is triggered by a HTML block or something that's treated as such (e.g. a Mako tag) appears at a lesser indentation.</p>
+
+<p>Example::</p>
+
+<pre><code>        % ul
+            % li
+                How deep can I go?
+            Not that deep, sorry.
+        I fear for you both.
+</code></pre>
+
+<p>Generates::</p>
+
+<pre><code>        &lt;ul&gt;
+            &lt;li&gt; How deep can I go? &lt;/li&gt;
+            Not that deep sorry.
+        &lt;/ul&gt;
+        I fear for you both.
+</code></pre>
+
+<p>Explicit Closure
+~~~~~~~~~~~~~~~~~~~~~
+To explicitly close a tag, simply place an empty Nemo tag (%) on a subsequent line at the same indentation
+For example:
+::</p>
+
+<pre><code>% li
+    We are happy people!
+%
+    I'm outside, so... not so happy, here.
+</code></pre>
+
+<p>Generates:
+::</p>
+
+<pre><code>&lt;li&gt;
+    We are happy people
+&lt;/li&gt;
+    I'm outside so not so happy here.
+</code></pre>
+
+<h1>Debugging</h1>
+
+<ul>
+<li><p>A lot of work has been put into Nemo to make it fail fast upon ambiguity, and yet generate good error messages.
+Anyone who's used an OCaml parser can agree when I say this is fundamental to a good parser[#]</p></li>
+<li><p>Errors are tracked back to the source line that caused them
+If possible, Nemo will also tell you what it expected at that point.</p></li>
+</ul><p>For more basic errors, you might see this an an exception traceback.
+::</p>
+
+<pre><code>       [8|Line: 6][        % endfor]
+        ^       ^           ^
+        |       |           |
+        Depth   Line #      Source content
+</code></pre>
+
+<p>This kind of traceback is usually produced by ambiguous indentation.</p>
+
+<h1>Arguments against using Nemo &amp; Responses</h1>
+
+<p>"I know HTML"
+    Good, this makes it easier to write it and gets out of your way if you don't want to use it.
+    This means you don't have to convert the entirety of your document to Nemo first---just the parts you want to.</p>
+
+<p>"I hate indentation"
+    This would be a valid argument if Nemo was for Rubyists, or C-philes, or PHPers,
+    or programmers versed in a lingua fraca that doesn't include significant white space.</p>
+
+<pre><code>However Nemo is for Pythonistas by a Pythonista.
+My editor already handles white-space---including smart indentation during pasting code. Doesn't yours?
+</code></pre>
+
+<p>"I don't like that Disney fish and/or I'm afraid that they'll sue you for using its name"
+    Haven't you heard of Captain Nemo, aka Prince Dakkar?
+    Also, when I was searching for a name I thought that 'the Disney fish' Nemo was a type of Mako shark.
+    Apparently Chum is the Mako shark in the movie.</p>
+
+<pre><code>However, rest assured in a parallel universe Nemo is the Mako shark and I can say
+that we are remembering our roots, keeping it real, and are still Jenny on the block, ecetera and so forth. =)
+</code></pre>
+
+<p>"I like Haml"
+    This is a can of worms I'll talk about later.</p>
+
+<p>"I want Seasides' canvas"
+    Let's get a beer together.</p>
+
+<h1>Future</h1>
+
+<h2>Syntax</h2>
+
+<p>Currently '||' is the only way to break out of a multi-line Nemo statement and get it to nest the subsequent HTML on the rest of the line.
+However, it is a common case to directly print template variables.</p>
+
+<p>The '| &gt;' terminator will indicate to Nemo that the rest characters should be treated as a python one-liner that returns a string.</p>
+
+<p>Finally, this will be possible:
+::</p>
+
+<pre><code>% div .'profile'
+    % div .'left column'
+        % div #'date'       |&gt; print_date
+        % div #'address'    |&gt; current_user.address
+    % div .'right column'
+        % div #'email'      |&gt; current_user.email
+        % div #'bio'        |&gt; current_user.bio
+</code></pre>
+
+<h2>Strict Mode and Permissive Mode</h2>
+
+<p>Right now Nemo is running in 'Mixed' mode, in that it will always try to make sense of your document.
+However if you start a nemo block, it'll expct all of the contents to follow Nemo rules.
+That means it may improperly nest things if you mix tabs &amp; spaces.</p>
+
+<p>I have something coded up called "strict mode", that essential forces everything to have proper indentation without any laxity.</p>
+
+<p>Permissive mode on the other hand disables all checks and let's you live in the dangerous land of ambiguity.
+In Permissive mode, the only indentation rule followed is that contents must be to the right of their open scope.
+Nemo will no longer check to see if all the child nodes are properly indented.</p>
+
+<p>The differences are best demonstrated with an example:
+::</p>
+
+<pre><code>&lt;body&gt;
+    &lt;div&gt;
+        % span
+            Hello World!
+    &lt;/div&gt;
+
+    % div
+        Under permissive rules I'm allowed.
+
+        Under Mixed rules I'll parse until this point.
+            Why?
+            Well I'm nested under the document root.
+
+        Under strict rules I'll fail because that %span tag is above me.
+
+
+    % ul
+        % li
+            % span
+        &lt;li&gt;
+            % span
+                Under permissive rules I'm allowed.
+                Under mixed or strict rules I fail.
+                    Why?
+                    Because I'm enclosed by a Nemo node, the %ul.
+        &lt;/li&gt;
+&lt;/body&gt;
+</code></pre>
+
+<h2>Other Implementations?</h2>
+
+<p>Nemo can easily be extend to support other engines.
+    - Django
+    - Jinja
+    - Cheetah
+    - Spitfire
+    - Genshi
+    - etc.</p>
+
+<p>Nemo is a preprocessor over Mako, and isn't tied too deeply into it (except for importing FastBufferReader from Mako).</p>
+
+<h2>Alternatives?</h2>
+
+<p>Haml:
+    - HamlPy
+    - PyHaml
+    - DjangoHaml
+    - Dmsl
+    - SHPaml
+    - Pamela
+    - Mint
+    - MakoHaml</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
