@@ -33,7 +33,7 @@ settings.TEMPLATE_LOADERS = ( 'djmako.MakoLoader', ) + settings.TEMPLATE_LOADERS
 
 # Connect Nemo up with Mako
 if 'preprocessor' not in settings.MAKO_TEMPLATE_OPTS:
-    from ..parser import nemo
+    from nemo.parser import nemo
     settings.MAKO_TEMPLATE_OPTS['preprocessor'] = nemo
 
 # Auto Discover

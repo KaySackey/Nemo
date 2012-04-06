@@ -1,6 +1,6 @@
 import sys
 import timeit
-from parser import NemoParser
+from nemo.parser import NemoParser
 from mako.template import Template
 
 if len(sys.argv) > 1:
