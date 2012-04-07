@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from distutils.core import setup
 
-VERSION='0.4'
+VERSION='0.9.2'
 
 setup(
     name='Nemo Templates',

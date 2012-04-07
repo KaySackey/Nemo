@@ -151,7 +151,10 @@ Other projects
 
 Changelog
 ==================
-0.9b
+0.9.2
+- Finally on PyPi!
+  
+0.9.1
 
 If you've been following Nemo, version 1.0 will likely come with a few backwards incompatible changes. This is the preview.
 The intent is to allow Nemo to be cleanly used without Django. In the previous release, you could use Nemo, but you'd have to catch import errors.
