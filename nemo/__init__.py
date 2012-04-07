@@ -1,3 +1,3 @@
-__author__ = 'Kum'
+__author__ = 'Kay'
 
 from parser import NemoParser, nemo
