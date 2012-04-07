@@ -6,7 +6,9 @@ nemo\exceptions.py
 nemo\nodes.py
 nemo\parser.py
 nemo\app\__init__.py
+nemo\app\cache.py
 nemo\app\defaults.py
 nemo\app\importlib.py
+nemo\app\loader.py
 nemo\app\models.py
 nemo\app\shortcuts.py

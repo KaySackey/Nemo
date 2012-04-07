@@ -84,10 +84,10 @@ This project is inspired by PyHaml_. I have looked at PyHaml before, and found t
 	- It is not as pretty as it could be
 	- It was not invented here. =)
 
-As such, I set out to create an alternative 12 frantic hours of coding later, I have *something* that may possibly be called alpha.
+As such, I set out to create an alternative. Twelve frantic hours of coding later, I had *something* that may possibly be called alpha.
 
-Nemo is intended as an aid, not a shortcut, not a crutch, not a way to avoid learning HTML.
-In order to write proper Nemo, you still have to know HTML and as such it'll get out of your way
+Nemo is intended as an aid, not a shortcut, nor a crutch, nor a way to avoid learning HTML.
+In order to write proper Nemo, you still have to know HTML and as such it will get out of your way
 if you just want to write HTML.
 
 However, if you want to write it fast, write in Nemo and let it do the heavy lifting for you.
@@ -153,7 +153,7 @@ Changelog
 ==================
 0.9.2
 - Finally on PyPi!
-  
+
 0.9.1
 
 If you've been following Nemo, version 1.0 will likely come with a few backwards incompatible changes. This is the preview.
@@ -387,8 +387,8 @@ This kind of traceback is usually produced by ambiguous indentation.
 Arguments against using Nemo & Responses
 ======================================================
 "I know HTML"
-	Good, this makes it easier to write it and gets out of your way if you don't want to use it.
-	This means you don't have to convert the entirety of your document to Nemo first---just the parts you want to.
+	Great! Knowing HTML makes it easier to write Nemo templates. Nemo gets out of your way if you don't want to use it.
+	So you don't have to convert the entirety of your document to Nemo.
 
 "I hate indentation"
 	This would be a valid argument if Nemo was for Rubyists, or C-philes, or PHPers,
@@ -402,8 +402,8 @@ Arguments against using Nemo & Responses
 	Also, when I was searching for a name I thought that 'the Disney fish' Nemo was a type of Mako shark.
 	Apparently Chum is the Mako shark in the movie.
 
-	However, rest assured in a parallel universe Nemo is the Mako shark and I can say
-	that we are remembering our roots, keeping it real, and are still Jenny on the block, ecetera and so forth. =)
+	However, rest assured. In a parallel universe, Nemo is the Mako shark and I can say
+	that we are remembering our roots, keeping it real, and are still Jenny on the block, et cetera and so forth. =)
 
 "I like Haml"
 	This is a can of worms I'll talk about later.
@@ -439,9 +439,8 @@ Strict Mode and Permissive Mode
 
 
 Right now Nemo is running in 'Mixed' mode, in that it will always try to make sense of your document.
-However if you start a nemo block, it'll expct all of the contents to follow Nemo rules.
+However if you start a nemo block, it'll expect all of the contents to follow Nemo rules.
 That means it may improperly nest things if you mix tabs & spaces.
-
 
 I have something coded up called "strict mode", that essential forces everything to have proper indentation without any laxity.
 
