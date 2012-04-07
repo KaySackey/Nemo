@@ -29,7 +29,7 @@ for setting in dir(defaults):
         setattr(settings, setting, getattr(defaults, setting))
 
 # Add Mako to template loaders
-settings.TEMPLATE_LOADERS = ( 'djmako.MakoLoader', ) + settings.TEMPLATE_LOADERS
+settings.TEMPLATE_LOADERS = ( 'nemo.app.loader.MakoLoader', ) + settings.TEMPLATE_LOADERS
 
 # Connect Nemo up with Mako
 if 'preprocessor' not in settings.MAKO_TEMPLATE_OPTS:

@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 from distutils.core import setup
 
+VERSION='0.4'
+
 setup(
     name='Nemo Templates',
-    version='0.2.1',
+    version=VERSION,
     description='Lightweight Templating Language',
     long_description="""
 Nemo is a light weight templating language built upon Mako Templates, and inspired by Haml.
@@ -17,17 +19,19 @@ More documentation follows on the Github Repository.
     url='https://github.com/9cloud/Nemo',
     packages=["nemo"],
     requires=["mako (>=0.7.0)", "pyparsing (==1.5.6)"],
-    license = 'MIT',
+    license = 'BSD',
+    keywords="django mako templating",
+    platforms='OS Independent',
     classifiers=[
               'Development Status :: 4 - Beta',
               'Environment :: Console',
               'Environment :: Web Environment',
               'Intended Audience :: Developers',
-              'License :: OSI Approved :: MIT License',
-              'Operating System :: MacOS :: MacOS X',
-              'Operating System :: Microsoft :: Windows',
-              'Operating System :: POSIX',
-              'Programming Language :: Python',
+              "License :: OSI Approved :: BSD License",
+              "Operating System :: OS Independent",
+              "Programming Language :: Python",
+              'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
               'Topic :: Software Development :: Libraries :: Python Modules',
+              'Topic :: Text Processing :: Markup :: HTML',
               ],
 )
