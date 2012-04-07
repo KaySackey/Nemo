@@ -87,6 +87,3 @@ def render(request, *args, **kwargs):
     kwargs['context_instance'] = context_instance
 
     return HttpResponse(render_to_string(*args, **kwargs), **httpresponse_kwargs)
-
-
-
