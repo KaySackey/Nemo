@@ -106,11 +106,6 @@ Nemo is built over Mako but has to be installed separately.
 
 Django Integration
 ----------------------
-- Install Djmako to get a Django template loaders for Mako.
-  ::
-
-		pip install djmako
-
 - Add 'nemo.app' to your Django sites package. It will automatically use the following defaults:
   ::
 
@@ -135,6 +130,10 @@ Django Integration
 
 		def my_view(request):
 			return render_to_response('templates\list.Mako', def_name='item')
+
+- Notes
+
+  As of version 0.4, Nemo includes a hook for the Mako cache system.
 
 
 Other projects
