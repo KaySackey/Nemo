@@ -505,6 +505,11 @@ Haml:
 
 Others? Contact me.
 
+Projects Built with Nemo
+---------------------------
+Nemoc_ : A command-line rendering tool for Nemo templates
+
+
 Links:
 ----------------------
 - Mako_
@@ -517,6 +522,7 @@ Links:
 - MakoHaml_
 - GRHaml (Dead)
 
+.. _Nemoc: https://github.com/tos-kamiya/nemoc
 .. _def: http://www.makotemplates.org/docs/defs.html
 .. _Mako: http://www.makotemplates.org/
 .. _Haml: http://haml-lang.com/
