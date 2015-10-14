@@ -95,13 +95,9 @@ However, if you want to write it fast, write in Nemo and let it do the heavy lif
 Usage
 ===================
 
-First, place this module somewhere in your python path.
-Pip/Easy_install will be supported later.
-
-Nemo is built over Mako but has to be installed separately.
 ::
 
-    pip install mako
+    pip install nemo-templates
 
 
 Django Integration
