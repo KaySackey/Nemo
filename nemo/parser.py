@@ -33,9 +33,6 @@ class BaseParser(object):
     def parse(self, source):
         self._init(iter(source))
 
-    def buffer_value(self):
-        return self.buffer.getvalue()
-
 
 class NemoParser(BaseParser):
     """
@@ -56,7 +53,6 @@ class NemoParser(BaseParser):
                 self._next()
                 self._line_number += 1
             except StopIteration:
-                # out = StringIO()
                 out = Buffer()
                 head.write(out)
                 return out.getvalue()
@@ -145,25 +141,35 @@ class NemoParser(BaseParser):
         html.setParseAction(depth_from_indentation(self._add_html_node))
 
         # Match Mako control tags
+
+        # All nemo statements are like mako statements, and must begin with %
         nemo_tag    = Literal('%')
 
+        # Mako allows for for/if/while statements
         begin       = Keyword('for')    | Keyword('if')     | Keyword('while')
         middle      = Keyword('else')   | Keyword('elif')
         end         = Keyword('endfor') | Keyword('endif')  | Keyword('endwhile')
         control     = nemo_tag + (begin | middle | end)
 
+        # When we match a control statement (for/if/while), the body will be indented and we'll have to account for it
+        # We're using _add_nesting_mako_control_node / _add_mako_middle_node / _add_mako_control_leaf do the same thing
+        # They're only separate functions due to testing
         begin.setParseAction(depth_from_indentation(self._add_nesting_mako_control_node) )
         middle.setParseAction(depth_from_indentation(self._add_mako_middle_node))
         end.setParseAction(depth_from_indentation(self._add_mako_control_leaf))
 
-        # Match Nemo tags
+        # Match HTML tags
         argument_name = Word(alphas,alphanums+"_-:")
         argument_value = quotedString
         regular_argument = argument_name + Literal('=') + argument_value
 
-        class_name = Literal('.').setParseAction(lambda x: 'class=')
-        id_name = Literal('#').setParseAction(lambda x: 'id=')
+        # Match Nemo tags
+        # These are . and #
+        class_name = Literal('.').setParseAction(lambda x: 'class=') # Transform . into class= within the text
+        id_name = Literal('#').setParseAction(lambda x: 'id=')       # Transform # into id= within the text
         special_argument = (class_name | id_name) + argument_value
+
+        # Match argument (HTML tags + Nemo Tags)
         argument = Combine(special_argument) | Combine(regular_argument)
 
         # Match single Nemo statement (Part of a multi-line)
@@ -174,12 +180,19 @@ class NemoParser(BaseParser):
         nemo_html = nemo_tag + Group(Word(alphanums+"_-:") + Group(ZeroOrMore(argument)))
         nemo_html.setParseAction(depth_from_nemo_tag(self._add_nemo_node))
 
-        # Match a multi-statement expression. Nemo statements are seperated by |. Anything after || is treated as html
+        # Setup to match a multi-statement expression. 
+        # These, nemo statements are separated by |. Anything after || is treated as html            
         separator   = Literal('|').suppress()
-        html_separator   = Literal('||') # | Literal('|>')
+        
+        # Match a list of nemo statements
         nemo_list =  nemo_html + ZeroOrMore( separator + inline_nemo_html )
+        
+        # Match final HTML
         inline_html = html.copy()
+        html_separator   = Literal('||')
         inline_html.setParseAction(depth_from_match(self._add_inline_html_node))
+        
+        # A nemo multi-line statement can be any number of nemo statements separated by | then optionally terminated with an HTML statement
         nemo_multi =  nemo_list + Optional(html_separator + inline_html)
 
         # Match empty Nemo statement
@@ -188,7 +201,6 @@ class NemoParser(BaseParser):
 
         # Match unused Mako tags
         mako_tags   = Literal('<%') | Literal('%>') | Literal('%CLOSETEXT') | Literal('</%')
-        mako        = mako_tags
         mako_tags.setParseAction(depth_from_indentation(self._add_html_node))
 
         # Matches General
@@ -198,12 +210,7 @@ class NemoParser(BaseParser):
         # Depth Calculation (deprecated?)
         self._depth = len(self._c) - len(self._c.strip())
 
-        #try:
         line.parseString(self._c)
-
-        #except ParseException:
-            # Finally if we couldn't match, then handle it as HTML
-            #add_html_node(self._c)
 
     ###
     ###   This group of functions transforms the AST.
@@ -247,7 +254,7 @@ class NemoParser(BaseParser):
                         parent = testing_node.parent
                         parent.add_child(node)
 
-                        # Todo: Remove this check
+                        # Check if this node would be closing the right statement
                         testing_node.check_as_closer(node, active_node)
                         
                         return testing_node.parent
@@ -392,6 +399,9 @@ class NemoArgumentParser(BaseParser):
             for end in end_delimiters:
                 if self._c == end and self._last_c != '\\':
                     return
+
+    def buffer_value(self):
+        return self.buffer.getvalue()
 
     def parse(self, source):
         self.buffer = Buffer()
