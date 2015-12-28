@@ -4,10 +4,9 @@ from mako.util import FastEncodingBuffer
 from exceptions import NemoException
 from pyparsing import (Word, Keyword, Literal, OneOrMore, Optional, \
                       restOfLine, alphas, ParseException, Empty, \
-                      Forward, ZeroOrMore, Group, CharsNotIn, White, delimitedList, quotedString, alphanums, Combine  )
-import pyparsing
+                      Forward, ZeroOrMore, Group, CharsNotIn, White, delimitedList, quotedString, alphanums, Combine, \
+                      NotAny, MatchFirst )
 from nodes import Node, NemoNode, NemoRoot, MakoNode, Leaf, MakoEndTag
-
 from exceptions import NemoException
 
 class Buffer(FastEncodingBuffer):
@@ -142,7 +141,6 @@ class NemoParser(BaseParser):
 
 
         # Match HTML
-        from pyparsing import NotAny, MatchFirst
         html = restOfLine
         html.setParseAction(depth_from_indentation(self._add_html_node))
 
@@ -207,10 +205,10 @@ class NemoParser(BaseParser):
             # Finally if we couldn't match, then handle it as HTML
             #add_html_node(self._c)
 
-    """
-        This group of functions transforms the AST.
-        They are expected to return the active node
-    """
+    ###
+    ###   This group of functions transforms the AST.
+    ###    They are expected to return the active node
+    ###
     def _add_to_tree(self, node, active_node):
         if node.depth > active_node.depth:
             active_node.add_child(node)
@@ -234,7 +232,7 @@ class NemoParser(BaseParser):
             #                    'Followed by:\n\t%s\n' % node + \
             #                    'Parent:\n\t%s' % active_node.parent )
         else:
-            """Try to assign node to one of the ancestors of active_node"""
+            ### Try to assign node to one of the ancestors of active_node
             testing_node = active_node
 
             while testing_node is not None:
@@ -263,7 +261,7 @@ class NemoParser(BaseParser):
                 raise NemoException('\nIncorrect indentation\n' + \
                                     'at:\n\t%s\n' % active_node + \
                                     'Followed by:\n\t%s\n' % node + \
-                                    'Parent:\n\t%s' % parent )
+                                    'Parent:\n\t%s' % getattr(testing_node, 'parent', None) )
             #result = self._place_in_ancestor(node, active_node)
             #result.check_as_closer(node, active_node)
             #return result
@@ -297,11 +295,11 @@ class NemoParser(BaseParser):
                                 'Followed by:\n\t%s\n' % node + \
                                 'Parent:\n\t%s' % parent )
 
-    """
-        This group of functions transforms the AST.
-        They correspond to the type of node currently being parsed.
-        They are expected to return a node if the current scope changes.
-    """
+
+    ##    This group of functions transforms the AST.
+    ##    They correspond to the type of node currently being parsed.
+    ##    They are expected to return a node if the current scope changes.
+
 
     def _add_html_node(self, tokens):
         if self.debug: print "%s | html %s " % (self._line_number, self._c)
@@ -427,7 +425,7 @@ class NemoArgumentParser(BaseParser):
                     self._slurp_till(delimiter_found)
             else:
                 if self._c not in expect:
-                    raise NemoException('Expected one of: %s but received %s' % (expect, c))
+                    raise NemoException('Expected one of: %s but received %s' % (expect, self._c))
                 if expect is quotes:
                     delimiter_found = self._c
 
