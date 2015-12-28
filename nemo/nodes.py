@@ -134,14 +134,11 @@ class NemoNode(Node):
 
 class MakoNode(NemoNode):
     """
-        I represent a tag in Mako. Either an openning tag, or a middle tag.
+        I represent a tag in Mako. Either an opening tag, or a middle tag.
         I can have children.
     """
     def __init__(self, value, depth, line_number):
-        self.value = (value, '')
-        self.depth = depth
-        self.line_number = line_number
-        self.children = []
+        super(MakoNode, self).__init__(value=(value, ''), depth=depth, line_number=line_number)
 
     def add_child(self, node):
         self.children.append(node)
@@ -154,9 +151,24 @@ class MakoNode(NemoNode):
 
         self._write_children(buffer)
 
-    # Note, very soon this check is going to be removed.
-    # Right now it just provides security against unforseen bugs, causing an explicit failure instead of empty nodes
     def check_as_closer(self, node, active_node):
+        """
+        Originally this was slated to be removed because it only provided security against bugs we hadn't tested against.
+        In practice (the last 4 years), it proved to be invaluable in
+        providing better error messages than otherwise would be available.
+
+        It didn't uncover any real bugs, but it showed incorrect indentation at a better level than would otherwise be provided.
+
+        Technically removing this wouldn't result in invalid code immediately,
+        but it'll let you write poorly Nemo and forget about it.
+        Then later on, you'll end up writing more seemingly valid code which will
+        caused an error in previously written statements.
+
+        Unlike in HAML, we've chosen to cause an error as soon as possible,
+        rather than implicitly swallowing the error node.
+        """
+
+        # Debugging
         #print node
         #print self
         # The node passed in should be a MakoNode or a MakoLeaf at the same indentation level
@@ -182,8 +194,6 @@ class MakoNode(NemoNode):
                                     'Within active scope of:\n\t%s' % active_node )
 
             potentially_closed = potentially_closed.parent
-
-
 
 class NemoRoot(NemoNode):
     """
