@@ -485,7 +485,7 @@ Nemo can easily be extend to support other engines.
 	- Genshi
 	- etc.
 
-Nemo is a preprocessor over Mako, and isn't tied too deeply into it (except for importing FastBufferReader from Mako).
+Nemo is a preprocessor over Mako, and isn't tied too deeply into it (except for importing FastEncodingBuffer from Mako).
 
 Alternatives?
 ----------------------
